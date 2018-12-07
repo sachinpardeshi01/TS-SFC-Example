@@ -5,19 +5,58 @@ export interface IProps{
     enthusiasmLevel ?: number;
 }
 
-function Hello ({name,enthusiasmLevel = 1 } : IProps){
+interface IState {
+    currentEnthusiam: number;
+}
+
+// function Hello ({name,enthusiasmLevel = 1 } : IProps){
     
-    if(enthusiasmLevel <=0){
-        throw new Error('You could be a little more enthusiastic. :D');
+//     if(enthusiasmLevel <=0){
+//         throw new Error('You could be a little more enthusiastic. :D');
+//     }
+
+//     return (
+//         <div className="hello">
+//             <div className="greeting">
+//                 Hello {name + getExclemationMarks(enthusiasmLevel)}
+//             </div>
+//         </div>
+//     )
+// }
+
+
+class Hello extends React.Component<IProps,IState>{
+
+    constructor(props: IProps){
+        super(props);
+        this.state = { currentEnthusiam: props.enthusiasmLevel || 1};
     }
 
-    return (
-        <div className="hello">
-            <div className="greeting">
-                Hello {name + getExclemationMarks(enthusiasmLevel)}
+    onIncrement = () => this.updateEnthusiasm(this.state.currentEnthusiam + 1);
+    onDecrement = () => this.updateEnthusiasm(this.state.currentEnthusiam -1 );
+
+    updateEnthusiasm(currentEnthusiam: number) {
+        this.setState({ currentEnthusiam });
+      }
+
+    render(){
+        const {name} = this.props;
+
+        if(this.state.currentEnthusiam <= 0 ){
+            throw new Error('You could be a little more enthusiastic. :D');
+        }
+
+        return (
+            <div className="hello">
+                <div className="greeting">
+                Hello {name + getExclemationMarks(this.state.currentEnthusiam)}
+                </div>
+                <button onClick={this.onDecrement}>-</button>
+                <button onClick={this.onIncrement}>+</button>
             </div>
-        </div>
-    )
+        )
+    }
+
 }
 
 export default Hello;
